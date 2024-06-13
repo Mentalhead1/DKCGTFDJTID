@@ -14,6 +14,7 @@ public class UIController : MonoBehaviour
 
     public GameObject MenuTexts, GameTexts;
 
+    public GameObject FloatingTextPrefab;
     private void Awake()
     {
         instance = this;
@@ -63,5 +64,15 @@ public class UIController : MonoBehaviour
     {
         Highscore.text = "Highscore: " + PPHolder.instance.GetHighscore();
         LastScore.text = "Last Score: " + PPHolder.instance.GetLastScore();
+    }
+
+    public FloatingText SpawnFloatingText(string Text, Vector3 Position)
+    {
+        GameObject tempFloatingTextObj = Instantiate(FloatingTextPrefab);
+        FloatingText tempFloatingText = tempFloatingTextObj.GetComponent<FloatingText>();
+        tempFloatingText.UpdateText(Text);
+        tempFloatingTextObj.transform.SetParent(this.transform);
+        tempFloatingTextObj.transform.position = Position;
+        return tempFloatingText;
     }
 }

@@ -110,10 +110,7 @@ public class GameController : MonoBehaviour
         // clicked second right card
         else if (ActiveCard.TypeID == card.TypeID)
         {
-            CurrentTurns++;
-            CorrectMatches++;
-            CurrentScore += 1 + ComboCounter;
-            ComboCounter++;
+            HandleCorrect();
 
             ActiveCard.SetClickingAbility(false);
             card.SetClickingAbility(false);
@@ -131,12 +128,30 @@ public class GameController : MonoBehaviour
         // clicked wrong card
         else 
         {
-            ComboCounter = 0;
-            CurrentTurns++;
+            HandleWrong();
             otherWrongActiveCard = card;
         }
 
         DoGameStateChange();
+    }
+
+    private void HandleCorrect() 
+    {
+        CurrentTurns++;
+        CorrectMatches++;
+        int ScoreToAdd = 1 + ComboCounter;
+        CurrentScore += ScoreToAdd;
+
+        FloatingText FT = UIController.instance.SpawnFloatingText("+" + ScoreToAdd.ToString(), Camera.main.WorldToScreenPoint(ActiveCard.transform.position));
+        FT.UpdateTextFontSize(Mathf.RoundToInt(FT.text.fontSize + 5 * ComboCounter));
+
+        ComboCounter++;
+    }
+
+    private void HandleWrong() 
+    {
+        ComboCounter = 0;
+        CurrentTurns++;
     }
 
     private bool IsLevelDone() 

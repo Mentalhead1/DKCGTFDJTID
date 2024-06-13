@@ -695,6 +695,7 @@ MonoBehaviour:
   Score: {fileID: 1221389136}
   MenuTexts: {fileID: 1648261107}
   GameTexts: {fileID: 533108923}
+  FloatingTextPrefab: {fileID: 7911041020902423680, guid: fe8782a96cd6f2c49acebde11a6aa8dc, type: 3}
 --- !u!114 &908308557
 MonoBehaviour:
   m_ObjectHideFlags: 0
