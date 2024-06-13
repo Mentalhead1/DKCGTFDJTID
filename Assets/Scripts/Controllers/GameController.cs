@@ -46,11 +46,6 @@ public class GameController : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-        //StartLevel(CurrentLevel);
-    }
-
     public void InitializeNewGame() 
     {
         CurrentLevel = 0;
@@ -92,8 +87,6 @@ public class GameController : MonoBehaviour
         card.RotateCard();
 
         card.SetClickingAbility(false);
-
-        
 
         // nothing clicked yet
         if (ActiveCard == null) 
@@ -232,7 +225,6 @@ public class GameController : MonoBehaviour
                 TimeAfterLastCardClick = 0;
             }
         }
-
     }
 
     private void EndGame() 

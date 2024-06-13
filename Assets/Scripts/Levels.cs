@@ -50,5 +50,4 @@ public class Level
         LayoutX = _X;
         LayoutY = _Y;
     }
-
 }

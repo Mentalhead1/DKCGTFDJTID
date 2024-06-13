@@ -96,7 +96,6 @@ public class Card : MonoBehaviour
                 ShouldBeAnimatingScale = false;
             }
         }
-
     }
 
     private void OnMouseDown()

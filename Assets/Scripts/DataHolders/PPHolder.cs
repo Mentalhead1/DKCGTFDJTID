@@ -15,7 +15,7 @@ public class PPHolder : MonoBehaviour
         }
         if (!PlayerPrefs.HasKey("Highscore")) { PlayerPrefs.SetInt("Highscore", 0); }
         if (!PlayerPrefs.HasKey("LastScore")) { PlayerPrefs.SetInt("LastScore", 0); }
-        
+
         if (!PlayerPrefs.HasKey("Muted")) { PlayerPrefs.SetInt("Muted", 0); }
     }
 
