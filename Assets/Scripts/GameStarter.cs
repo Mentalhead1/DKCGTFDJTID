@@ -36,8 +36,8 @@ public class GameStarter : MonoBehaviour
 
         SetAllCardTypes();
 
-
         // Adjust camera to fit all cards
+        Camera.main.GetComponent<CameraRepositioner>().Reposition(CardsHolder.gameObject);
     }
 
     private void CreateCards(int X, int Y) 
@@ -54,18 +54,14 @@ public class GameStarter : MonoBehaviour
         }
 
         CardsHolder.transform.localPosition -= Cards[Cards.Count - 1].transform.localPosition / 2f;
-
     }
 
     private void SetCardPosition(Transform card,int i, int j) 
     {
         Vector3 CardScale = card.transform.localScale;
 
-        card.localPosition = new Vector3(i * CardScale.x + Padding.x * i, j * CardScale.y + Padding.y * j, 0);// - new Vector3(0.5f * CardScale.x, 0,0)
-        //card.localPosition -= card.localPosition / 2f;
+        card.localPosition = new Vector3(i * CardScale.x + Padding.x * i, j * CardScale.y + Padding.y * j, 0);
     }
-
-
 
     private void SetAllCardTypes() 
     {
@@ -115,5 +111,4 @@ public class GameStarter : MonoBehaviour
             Colors.Add(new Color(Random.Range(0f, 0.85f), Random.Range(0f, 0.85f), Random.Range(0f, 0.85f)));
         }
     }
-
 }

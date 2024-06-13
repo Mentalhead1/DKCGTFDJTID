@@ -34,8 +34,6 @@ public class GameController : MonoBehaviour
     {
         card.RotateCard();
 
-        Debug.Log("Clicked Card with ID: " + card.TypeID);
-
         card.SetClickingAbility(false);
 
         // nothing clicked yet

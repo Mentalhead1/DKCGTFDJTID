@@ -30,9 +30,6 @@ public static class Extensions
         return (T)values.GetValue(random);
     }
 
-    /// <summary>
-    /// Shuffles the element order of the specified list.
-    /// </summary>
     public static void Shuffle<T>(this IList<T> ts)
     {
         var count = ts.Count;
@@ -45,26 +42,4 @@ public static class Extensions
             ts[r] = tmp;
         }
     }
-
-    public static IEnumerable<T> StringsToEnums<T>(this IEnumerable<string> strs) where T : struct, IConvertible
-    {
-        Type t = typeof(T);
-
-        var ret = new List<T>();
-
-        if (t.IsEnum)
-        {
-            T outStr;
-            foreach (var str in strs)
-            {
-                if (Enum.TryParse(str, out outStr))
-                {
-                    ret.Add(outStr);
-                }
-            }
-        }
-
-        return ret;
-    }
-
 }
