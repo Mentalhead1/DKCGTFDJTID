@@ -9,7 +9,10 @@ public class PPHolder : MonoBehaviour
 
     private void Awake()
     {
-        instance = this;// to always be active
+        if (instance == null)
+        {
+            instance = this;// to always be active
+        }
         if (!PlayerPrefs.HasKey("Highscore")) { PlayerPrefs.SetInt("Highscore", 0); }
         if (!PlayerPrefs.HasKey("LastScore")) { PlayerPrefs.SetInt("LastScore", 0); }
         

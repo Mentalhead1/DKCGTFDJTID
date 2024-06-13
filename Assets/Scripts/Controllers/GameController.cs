@@ -37,13 +37,13 @@ public class GameController : MonoBehaviour
         if (instance == null)
         {
             instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
         else 
         {
             Destroy(this.gameObject);
         }
 
-        DontDestroyOnLoad(this.gameObject);
     }
 
     private void Start()
