@@ -12,14 +12,23 @@ public class GameController : MonoBehaviour
     private Card ActiveCard = null;
     private Card otherWrongActiveCard = null;
 
+    private bool GameIsActive = false;
     private float GameStartTime = 2f;
     private float GameTime = 0;
     private bool GameControlsStarted = false;
-    private int CurrentLevel = 0;
-    private int CorrectMatches = 0;
+
+    public int CurrentLevel = 0;
+    public int CorrectMatches = 0;
+    public int CurrentScore = 0;
+    public int CurrentTurns = 0;
+
+    private int ComboCounter = 0;
 
     public event Action OnGameControlsStarted;
     private void DoGameControlsStarted() { OnGameControlsStarted?.Invoke(); }
+    
+    public event Action OnGameStateChange;
+    private void DoGameStateChange() { OnGameStateChange?.Invoke(); }
 
     private void Awake()
     {
@@ -37,10 +46,21 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        //StartLevel(CurrentLevel);
+    }
+
+    public void InitializeNewGame() 
+    {
+        CurrentLevel = 0;
+        CurrentTurns = 0;
+        CurrentScore = 0;
+        CorrectMatches = 0;
+        GameIsActive = true;
+
         StartLevel(CurrentLevel);
     }
 
-    private void StartLevel(int currentLevel) 
+    public void StartLevel(int currentLevel) 
     {
         ClearForStart();
         Starter.StartGame(levels.AllLevels[currentLevel]);
@@ -57,6 +77,8 @@ public class GameController : MonoBehaviour
         GameControlsStarted = false;
         GameTime = 0;
         CorrectMatches = 0;
+        CurrentTurns = 0;
+        ComboCounter = 0;
     }
 
     public void CardClicked(Card card) 
@@ -88,6 +110,11 @@ public class GameController : MonoBehaviour
         // clicked second right card
         else if (ActiveCard.TypeID == card.TypeID)
         {
+            CurrentTurns++;
+            CorrectMatches++;
+            CurrentScore += 1 + ComboCounter;
+            ComboCounter++;
+
             ActiveCard.SetClickingAbility(false);
             card.SetClickingAbility(false);
 
@@ -98,16 +125,18 @@ public class GameController : MonoBehaviour
             
             ActiveCard = null;
 
-            CorrectMatches++;
             if (IsLevelDone()) { GoToNextLevel(); }
         }
 
         // clicked wrong card
         else 
         {
+            ComboCounter = 0;
+            CurrentTurns++;
             otherWrongActiveCard = card;
         }
 
+        DoGameStateChange();
     }
 
     private bool IsLevelDone() 
@@ -126,6 +155,7 @@ public class GameController : MonoBehaviour
         if (CurrentLevel >= levels.AllLevels.Count) 
         {
             // Display Menu
+            EndGame();
             return;
         }
         StartLevel(CurrentLevel);
@@ -149,6 +179,13 @@ public class GameController : MonoBehaviour
             GameControlsStarted = true;
             DoGameControlsStarted();
         }
+    }
 
+    private void EndGame() 
+    {
+        GameIsActive = false;
+        CurrentLevel = 0;
+        PPHolder.instance.TrySettingNewScore(CurrentScore);
+        UIController.instance.DisplayEndGame();
     }
 }
