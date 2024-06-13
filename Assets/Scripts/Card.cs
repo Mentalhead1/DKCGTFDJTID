@@ -12,16 +12,10 @@ public class Card : MonoBehaviour
         TypeID = _TypeID;
         CardFaceRenderer.material = _Material;
     }
-
-    // Start is called before the first frame update
-    void Start()
+    
+    public void SetCard(int _TypeID, Color _MaterialColor) 
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        TypeID = _TypeID;
+        CardFaceRenderer.material.color = _MaterialColor;
     }
 }

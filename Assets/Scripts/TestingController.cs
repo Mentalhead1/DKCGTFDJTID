@@ -10,7 +10,6 @@ public class TestingController : MonoBehaviour
     public GameController GC;
     public GameStarter GS;
 
-    // Start is called before the first frame update
     void Start()
     {
 #if !UNITY_EDITOR
@@ -21,7 +20,6 @@ public class TestingController : MonoBehaviour
         GS = GetComponent<GameStarter>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         // Restart Scene

@@ -11,7 +11,7 @@ public class Levels : MonoBehaviour
         InitializeLevels();
     }
 
-    void InitializeLevels() 
+    private void InitializeLevels() 
     {
         AllLevels.Add(new Level(2, 3));//6
         AllLevels.Add(new Level(4, 2));//8
@@ -26,14 +26,14 @@ public class Levels : MonoBehaviour
 
     public Level GetRandomLevel() 
     {
-        int RandomForXorYEven = Random.Range(0, 2);// should be valid, on average more Y than X.
+        int RandomForXorYEven = Random.Range(0, 2);// should be valid, on average more Y than X. and in total, more tan 2
         if (RandomForXorYEven == 0)
         {
-            return new Level(Random.Range(1, 6), Random.Range(1, 5) * 2);
+            return new Level(Random.Range(1, 4) * 2, Random.Range(2, 5));
         }
         else 
         { 
-            return new Level(Random.Range(1, 3) * 2, Random.Range(1, 10));
+            return new Level(Random.Range(2, 8), Random.Range(1, 3) * 2);
         }
     }
 }
