@@ -12,12 +12,14 @@ public class UIController : MonoBehaviour
     
     public Button PlayButton;
     public Button MuteButton;
+    public Button ResetButton;
 
     public TextMeshProUGUI Highscore, LastScore, CurrentLevel, Matches, Turns, Score;
 
     public GameObject MenuTexts, GameTexts;
 
     public GameObject FloatingTextPrefab;
+    public Transform FloatingTextPositonObject;
     private void Awake()
     {
         instance = this;
@@ -29,7 +31,8 @@ public class UIController : MonoBehaviour
         UpdateMenuScores();
         GameTexts.gameObject.SetActive(false);
         PlayButton.gameObject.SetActive(true);
-
+        ResetButton.gameObject.SetActive(true);
+        
         HandleMuteUnmute();
     }
 
@@ -47,6 +50,8 @@ public class UIController : MonoBehaviour
 
         MenuTexts.gameObject.SetActive(false);
         PlayButton.gameObject.SetActive(false);
+        ResetButton.gameObject.SetActive(false);
+
 
         GameController.instance.InitializeNewGame();
         GameTexts.gameObject.SetActive(true);
@@ -59,12 +64,11 @@ public class UIController : MonoBehaviour
         GameTexts.gameObject.SetActive(false);
         MenuTexts.gameObject.SetActive(true);
         PlayButton.gameObject.SetActive(true);
+        ResetButton.gameObject.SetActive(true);
     }
 
     public void UpdateGameScores() 
     {
-        Debug.Log("Updating Game Texts");
-
         CurrentLevel.text = "Level: " + GameController.instance.CurrentLevel + "/" + GameController.instance.levels.AllLevels.Count;
         Matches.text = "Matches: " + GameController.instance.CorrectMatches;
         Turns.text = "Turns: " + GameController.instance.CurrentTurns;
@@ -77,13 +81,14 @@ public class UIController : MonoBehaviour
         LastScore.text = "Last Score: " + PPHolder.instance.GetLastScore();
     }
 
-    public FloatingText SpawnFloatingText(string Text, Vector3 Position)
+    public FloatingText SpawnFloatingText(string Text)
     {
         GameObject tempFloatingTextObj = Instantiate(FloatingTextPrefab);
         FloatingText tempFloatingText = tempFloatingTextObj.GetComponent<FloatingText>();
         tempFloatingText.UpdateText(Text);
         tempFloatingTextObj.transform.SetParent(this.transform);
-        tempFloatingTextObj.transform.position = Position;
+        //tempFloatingTextObj.transform.position = new Vector3(Position.x,Position.y,0f);
+        tempFloatingTextObj.transform.position = FloatingTextPositonObject.position;
         return tempFloatingText;
     }
 
@@ -122,7 +127,6 @@ public class UIController : MonoBehaviour
             PlayerPrefs.SetInt("Mute", 1);
         }
         HandleMuteUnmute();
-        Debug.Log("Mute:" + PlayerPrefs.GetInt("Mute").ToString());
     }
 
 }

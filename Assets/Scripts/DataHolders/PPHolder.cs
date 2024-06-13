@@ -24,7 +24,7 @@ public class PPHolder : MonoBehaviour
     {
         if (GetHighscore() < NewScore) 
         {
-            FloatingText FT = UIController.instance.SpawnFloatingText("New Highscore!", new Vector3(Screen.width/2f,Screen.height/2f,0f));
+            FloatingText FT = UIController.instance.SpawnFloatingText("New Highscore!");
             FT.UpdateTextFontSize(Mathf.RoundToInt(FT.text.fontSize + 30));
 
             PlayerPrefs.SetInt("Highscore", NewScore);

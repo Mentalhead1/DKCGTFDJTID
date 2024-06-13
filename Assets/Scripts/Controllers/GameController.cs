@@ -148,7 +148,7 @@ public class GameController : MonoBehaviour
         int ScoreToAdd = 1 + ComboCounter;
         CurrentScore += ScoreToAdd;
 
-        FloatingText FT = UIController.instance.SpawnFloatingText("+" + ScoreToAdd.ToString(), Camera.main.WorldToScreenPoint(pressedCard.transform.position));
+        FloatingText FT = UIController.instance.SpawnFloatingText("+" + ScoreToAdd.ToString());
         FT.UpdateTextFontSize(Mathf.RoundToInt(FT.text.fontSize + 5 * ComboCounter));
 
         ComboCounter++;

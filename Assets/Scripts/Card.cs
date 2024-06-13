@@ -45,7 +45,6 @@ public class Card : MonoBehaviour
 
     public void RotateCard(bool WithAnimation = true) 
     {
-        Debug.Log("Rotating");
         IsFacingDown = !IsFacingDown;
         if (!WithAnimation)
         {
