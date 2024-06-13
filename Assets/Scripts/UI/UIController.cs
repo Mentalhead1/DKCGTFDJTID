@@ -4,6 +4,8 @@ using UnityEngine;
 
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
+
 public class UIController : MonoBehaviour
 {
     public static UIController instance;
@@ -44,17 +46,18 @@ public class UIController : MonoBehaviour
 
     public void DisplayEndGame() 
     {
+        UpdateMenuScores();
+
         GameTexts.gameObject.SetActive(false);
         MenuTexts.gameObject.SetActive(true);
         PlayButton.gameObject.SetActive(true);
-
     }
 
     public void UpdateGameScores() 
     {
         Debug.Log("Updating Game Texts");
 
-        CurrentLevel.text = "Level: " + GameController.instance.CurrentLevel + "/10";
+        CurrentLevel.text = "Level: " + GameController.instance.CurrentLevel + "/" + GameController.instance.levels.AllLevels.Count;
         Matches.text = "Matches: " + GameController.instance.CorrectMatches;
         Turns.text = "Turns: " + GameController.instance.CurrentTurns;
         Score.text = "Score: " + GameController.instance.CurrentScore;
@@ -75,4 +78,11 @@ public class UIController : MonoBehaviour
         tempFloatingTextObj.transform.position = Position;
         return tempFloatingText;
     }
+
+    public void ResetScores() 
+    {
+        PlayerPrefs.DeleteAll();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
+
 }

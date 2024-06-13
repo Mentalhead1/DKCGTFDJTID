@@ -8,14 +8,16 @@ public class GameController : MonoBehaviour
     public static GameController instance;
     public GameStarter Starter;
     public Levels levels;
+    private int TotalCards;
 
     private Card ActiveCard = null;
     private Card otherWrongActiveCard = null;
 
-    private bool GameIsActive = false;
     private float GameStartTime = 2f;
     private float GameTime = 0;
     private bool GameControlsStarted = false;
+
+    private float TimeAfterLastCardClick = 0;
 
     public int CurrentLevel = 0;
     public int CorrectMatches = 0;
@@ -55,7 +57,6 @@ public class GameController : MonoBehaviour
         CurrentTurns = 0;
         CurrentScore = 0;
         CorrectMatches = 0;
-        GameIsActive = true;
 
         StartLevel(CurrentLevel);
     }
@@ -63,6 +64,7 @@ public class GameController : MonoBehaviour
     public void StartLevel(int currentLevel) 
     {
         ClearForStart();
+        TotalCards = levels.AllLevels[currentLevel].LayoutX * levels.AllLevels[currentLevel].LayoutY;
         Starter.StartGame(levels.AllLevels[currentLevel]);
     }
 
@@ -84,6 +86,8 @@ public class GameController : MonoBehaviour
     public void CardClicked(Card card) 
     {
         if (!CanUseControls()) { return; }
+
+        TimeAfterLastCardClick = 0;
 
         card.RotateCard();
 
@@ -110,15 +114,13 @@ public class GameController : MonoBehaviour
         // clicked second right card
         else if (ActiveCard.TypeID == card.TypeID)
         {
-            HandleCorrect();
+            HandleCorrect(card);
 
             ActiveCard.SetClickingAbility(false);
             card.SetClickingAbility(false);
 
-            //ActiveCard.gameObject.SetActive(false);
-            //card.gameObject.SetActive(false);
-            ActiveCard.transform.localScale *= 0.5f;
-            card.transform.localScale *= 0.5f;
+            ActiveCard.ScaleDown();
+            card.ScaleDown();
             
             ActiveCard = null;
 
@@ -135,14 +137,14 @@ public class GameController : MonoBehaviour
         DoGameStateChange();
     }
 
-    private void HandleCorrect() 
+    private void HandleCorrect(Card pressedCard) 
     {
         CurrentTurns++;
         CorrectMatches++;
         int ScoreToAdd = 1 + ComboCounter;
         CurrentScore += ScoreToAdd;
 
-        FloatingText FT = UIController.instance.SpawnFloatingText("+" + ScoreToAdd.ToString(), Camera.main.WorldToScreenPoint(ActiveCard.transform.position));
+        FloatingText FT = UIController.instance.SpawnFloatingText("+" + ScoreToAdd.ToString(), Camera.main.WorldToScreenPoint(pressedCard.transform.position));
         FT.UpdateTextFontSize(Mathf.RoundToInt(FT.text.fontSize + 5 * ComboCounter));
 
         ComboCounter++;
@@ -156,7 +158,8 @@ public class GameController : MonoBehaviour
 
     private bool IsLevelDone() 
     {
-        if (CorrectMatches >= Starter.CardsHolder.childCount / 2) 
+        //if (CorrectMatches >= CardsHolder.instance.transform.childCount / 2) 
+        if (CorrectMatches >= TotalCards / 2) 
         {
             return true;
         }
@@ -173,7 +176,14 @@ public class GameController : MonoBehaviour
             EndGame();
             return;
         }
+        StartCoroutine(NextLevelCoroutine(1.5f));
+    }
+
+    private IEnumerator NextLevelCoroutine(float delayTime) 
+    {
+        yield return new WaitForSeconds(delayTime);
         StartLevel(CurrentLevel);
+        DoGameStateChange();
     }
 
     public bool CanUseControls()
@@ -188,17 +198,37 @@ public class GameController : MonoBehaviour
     private void Update()
     {
         GameTime += Time.deltaTime;
-
+        
         if (!GameControlsStarted && GameTime >= GameStartTime) 
         {
             GameControlsStarted = true;
             DoGameControlsStarted();
         }
+        
+        TimeAfterLastCardClick += Time.deltaTime;
+        if (TimeAfterLastCardClick > 3) 
+        {
+            if (ActiveCard != null && otherWrongActiveCard != null) 
+            {
+
+                ActiveCard.RotateCard();
+                ActiveCard.SetClickingAbility(true);
+                otherWrongActiveCard.RotateCard();
+                otherWrongActiveCard.SetClickingAbility(true);
+
+                otherWrongActiveCard = null;
+                ActiveCard = null;
+
+                TimeAfterLastCardClick = 0;
+            }
+        }
+
     }
 
     private void EndGame() 
     {
-        GameIsActive = false;
+        Starter.ClearActiveCards();
+
         CurrentLevel = 0;
         PPHolder.instance.TrySettingNewScore(CurrentScore);
         UIController.instance.DisplayEndGame();
