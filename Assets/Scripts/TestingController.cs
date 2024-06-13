@@ -32,6 +32,11 @@ public class TestingController : MonoBehaviour
         {
             GC.StartRandomGame();
         }
+        
+        if (Input.GetKeyDown(KeyCode.Y)) 
+        {
+            GC.GoToNextLevel();
+        }
     }
 
 }

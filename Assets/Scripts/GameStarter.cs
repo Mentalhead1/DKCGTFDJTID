@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class GameStarter : MonoBehaviour
 {
-
+    public GameController GC;
     public Camera mainCamera;
     public GameObject CardPrefab;
-    public Levels LevelsHolder;
     public Transform CardsHolder;
 
     public Vector2 Padding = new Vector2(0.5f,0.5f);
     public List<Color> Colors = new List<Color>();
 
     private List<Transform> Cards = new List<Transform>();
+
+    private void Awake()
+    {
+        GC.OnGameControlsStarted += StartControlsAndFlip;
+    }
+
+    private void OnDestroy()
+    {
+        GC.OnGameControlsStarted -= StartControlsAndFlip;
+    }
 
     public void StartGame(Level levelToStart) 
     {
@@ -38,6 +47,14 @@ public class GameStarter : MonoBehaviour
 
         // Adjust camera to fit all cards
         Camera.main.GetComponent<CameraRepositioner>().Reposition(CardsHolder.gameObject);
+    }
+
+    private void StartControlsAndFlip() 
+    {
+        foreach (Transform C in Cards)
+        {
+            C.GetComponent<Card>().RotateCard();
+        }
     }
 
     private void CreateCards(int X, int Y) 
@@ -70,6 +87,11 @@ public class GameStarter : MonoBehaviour
         for (int i = 0; i < Cards.Count; i++) 
         {
             Cards[i].GetComponent<Card>().SetCard(i / 2, Colors[i / 2]);
+        }
+
+        foreach (Transform C in Cards) 
+        {
+            C.GetComponent<Card>().RotateCard();
         }
     }
 
