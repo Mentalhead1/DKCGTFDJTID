@@ -93,9 +93,12 @@ public class GameController : MonoBehaviour
 
         card.SetClickingAbility(false);
 
+        
+
         // nothing clicked yet
         if (ActiveCard == null) 
-        { 
+        {
+            if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.CardFlip); }
             ActiveCard = card;
         }
 
@@ -109,6 +112,7 @@ public class GameController : MonoBehaviour
 
             otherWrongActiveCard = null;
             ActiveCard = card;
+            if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.CardFlip); }
         }
 
         // clicked second right card
@@ -148,12 +152,16 @@ public class GameController : MonoBehaviour
         FT.UpdateTextFontSize(Mathf.RoundToInt(FT.text.fontSize + 5 * ComboCounter));
 
         ComboCounter++;
+
+        if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.Correct); }
     }
 
     private void HandleWrong() 
     {
         ComboCounter = 0;
         CurrentTurns++;
+
+        if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.Wrong); }
     }
 
     private bool IsLevelDone() 
@@ -181,7 +189,9 @@ public class GameController : MonoBehaviour
 
     private IEnumerator NextLevelCoroutine(float delayTime) 
     {
-        yield return new WaitForSeconds(delayTime);
+        yield return new WaitForSeconds(delayTime/3);
+        if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.Win); }
+        yield return new WaitForSeconds(2*(delayTime/3));
         StartLevel(CurrentLevel);
         DoGameStateChange();
     }
@@ -232,5 +242,6 @@ public class GameController : MonoBehaviour
         CurrentLevel = 0;
         PPHolder.instance.TrySettingNewScore(CurrentScore);
         UIController.instance.DisplayEndGame();
+        if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.GameDone); }
     }
 }

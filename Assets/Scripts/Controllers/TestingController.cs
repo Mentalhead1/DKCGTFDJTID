@@ -37,6 +37,11 @@ public class TestingController : MonoBehaviour
         {
             GC.GoToNextLevel();
         }
+        
+        if (Input.GetKeyDown(KeyCode.M)) 
+        {
+            PlayerPrefs.DeleteAll();
+        }
     }
 
 }

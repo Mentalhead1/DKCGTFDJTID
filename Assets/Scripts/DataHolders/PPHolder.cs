@@ -12,6 +12,8 @@ public class PPHolder : MonoBehaviour
         instance = this;// to always be active
         if (!PlayerPrefs.HasKey("Highscore")) { PlayerPrefs.SetInt("Highscore", 0); }
         if (!PlayerPrefs.HasKey("LastScore")) { PlayerPrefs.SetInt("LastScore", 0); }
+        
+        if (!PlayerPrefs.HasKey("Muted")) { PlayerPrefs.SetInt("Muted", 0); }
     }
 
 

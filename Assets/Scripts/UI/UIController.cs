@@ -11,6 +11,7 @@ public class UIController : MonoBehaviour
     public static UIController instance;
     
     public Button PlayButton;
+    public Button MuteButton;
 
     public TextMeshProUGUI Highscore, LastScore, CurrentLevel, Matches, Turns, Score;
 
@@ -28,15 +29,22 @@ public class UIController : MonoBehaviour
         UpdateMenuScores();
         GameTexts.gameObject.SetActive(false);
         PlayButton.gameObject.SetActive(true);
+
+        HandleMuteUnmute();
     }
 
     private void OnDestroy()
     {
-        GameController.instance.OnGameStateChange -= UpdateGameScores;
+        if (GameController.instance != null)
+        {
+            GameController.instance.OnGameStateChange -= UpdateGameScores;
+        }
     }
 
     public void StartGame() 
     {
+        if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.ButtonClick); }
+
         MenuTexts.gameObject.SetActive(false);
         PlayButton.gameObject.SetActive(false);
 
@@ -81,8 +89,40 @@ public class UIController : MonoBehaviour
 
     public void ResetScores() 
     {
-        PlayerPrefs.DeleteAll();
+        if (AudioController.Instance != null) { AudioController.Instance.PlaySound(AudioController.Instance.ButtonClick); }
+
+        PlayerPrefs.DeleteKey("Highscore");
+        PlayerPrefs.DeleteKey("LastScore");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+    }
+
+    private void HandleMuteUnmute() 
+    {
+        if (PlayerPrefs.GetInt("Mute") == 0)
+        {
+            MuteButton.GetComponent<Image>().color = Color.white;
+            AudioController.Instance.MuteUnmute(false);
+        }
+        else 
+        {
+            MuteButton.GetComponent<Image>().color = Color.grey;
+            AudioController.Instance.MuteUnmute(true);
+        }
+    }
+
+    public void MuteUnmute() 
+    {
+        if (PlayerPrefs.GetInt("Mute") == 1)
+        {
+            // Unmute
+            PlayerPrefs.SetInt("Mute", 0);
+        }
+        else 
+        {
+            PlayerPrefs.SetInt("Mute", 1);
+        }
+        HandleMuteUnmute();
+        Debug.Log("Mute:" + PlayerPrefs.GetInt("Mute").ToString());
     }
 
 }

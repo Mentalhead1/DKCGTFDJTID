@@ -15,13 +15,14 @@ public class Levels : MonoBehaviour
     {
         AllLevels.Add(new Level(2, 3));//6
         AllLevels.Add(new Level(4, 2));//8
-        AllLevels.Add(new Level(3, 4));//12
-        AllLevels.Add(new Level(2, 6));//12
         AllLevels.Add(new Level(4, 3));//12
         AllLevels.Add(new Level(3, 4));//12
+        AllLevels.Add(new Level(4, 3));//12
         AllLevels.Add(new Level(3, 4));//12
+        AllLevels.Add(new Level(4, 4));//16
         AllLevels.Add(new Level(3, 6));//18
         AllLevels.Add(new Level(5, 4));//20
+        AllLevels.Add(new Level(4, 5));//20
     }
 
     public Level GetRandomLevel() 
